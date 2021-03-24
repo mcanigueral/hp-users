@@ -30,9 +30,11 @@ users_metadata <- readxl::read_xlsx('metadata.xlsx')
 
 
 # Database import --------------------------------------------------
-boto3 <- import("boto3")
-dynamodb <- boto3$resource('dynamodb',
-                           aws_access_key_id = config$dynamodb$access_key_id,
-                           aws_secret_access_key = config$dynamodb$secret_access_key,
-                           region_name = config$dynamodb$region_name)
+dynamodb <- get_dynamodb(
+  aws_access_key_id = config$dynamodb$access_key_id,
+  aws_secret_access_key = config$dynamodb$secret_access_key,
+  region_name = config$dynamodb$region_name
+)
+power_dynamodb_table <- get_dynamo_table(dynamodb, config$dynamodb$power_table_name)
+dht_dynamodb_table <- get_dynamo_table(dynamodb, config$dynamodb$dht_table_name)
 

@@ -31,14 +31,16 @@ auth0_server(function(input, output, session) {
                        start = today() - days(1), end = today(),
                        min = dmy(01012020), max = today(),
                        width = "20%", language = "ca", weekstart = 1)
-      )),
-      hr()
+      ))
+      # hr()
     )
   })
   
   power_data <- reactive({
     req(input$dates)
-    power_tbl <- get_id_table(dynamodb, 'power-sensors', user_metadata()$id_power, input$dates[1], input$dates[2])
+    power_tbl <- query_timeseries_data_table(
+      power_dynamodb_table, 'id', user_metadata()$id_power, 'timestamp', input$dates[1], input$dates[2], time_interval_mins = 5, spread_column = 'data'
+    )
     if (!is.null(power_tbl)) {
       return( 
         power_tbl %>% 
@@ -52,7 +54,9 @@ auth0_server(function(input, output, session) {
   
   dht_data <- reactive({
     req(input$dates)
-    dht_tbl <- get_id_table(dynamodb, 'dht-sensors', user_metadata()$id_dht, input$dates[1], input$dates[2]) 
+    dht_tbl <- query_timeseries_data_table(
+      dht_dynamodb_table, 'id', user_metadata()$id_dht, 'timestamp', input$dates[1], input$dates[2], time_interval_mins = 15, spread_column = 'data'
+    )
     if (!is.null(dht_tbl)) {
       return( 
         dht_tbl %>% 
