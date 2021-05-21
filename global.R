@@ -6,6 +6,7 @@ library(dplyr)
 library(lubridate)
 library(purrr)
 library(tidyr)
+library(paws)
 options(scipen=999) # To avoid scientific notation
 
 # shiny::runApp(port = 8080, launch.browser = TRUE)
@@ -20,7 +21,6 @@ config <- config::get(file = 'config.yml')
 # Utils before running the app --------------------------------------------
 source("support/server_utils.R")
 source("support/ui_utils.R")
-# source("support/downloadDataModule.R")
 
 
 # Metadata ---------------------------------------------------------------

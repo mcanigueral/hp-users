@@ -280,6 +280,97 @@
       "Repository": "CRAN",
       "Hash": "f4dbc5a47fd93d3415249884d31d6791"
     },
+    "paws": {
+      "Package": "paws",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "cec12e707388b40a0109c6e89b866176"
+    },
+    "paws.analytics": {
+      "Package": "paws.analytics",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b27a7fab001c13d69cce406315f991c1"
+    },
+    "paws.application.integration": {
+      "Package": "paws.application.integration",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "15be816c36116393eff157fe061cb564"
+    },
+    "paws.common": {
+      "Package": "paws.common",
+      "Version": "0.3.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7cc535da7013baf4951785ee2b9e41cc"
+    },
+    "paws.compute": {
+      "Package": "paws.compute",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "421a8a6138b5707842d49c6b47cf48d8"
+    },
+    "paws.cost.management": {
+      "Package": "paws.cost.management",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "37d8fd15437c3e41cbeaa826860b1452"
+    },
+    "paws.customer.engagement": {
+      "Package": "paws.customer.engagement",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b2f091502ec3a74caba2628bfbc5aba1"
+    },
+    "paws.database": {
+      "Package": "paws.database",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "27c9d75627046976c89f4a43279b5078"
+    },
+    "paws.machine.learning": {
+      "Package": "paws.machine.learning",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "27fbc04572e5a74200c75ebf7a1ca5b3"
+    },
+    "paws.management": {
+      "Package": "paws.management",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "85b61065160322f6729269cb59bd434e"
+    },
+    "paws.networking": {
+      "Package": "paws.networking",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "603472424ac4c5244abba09728bd15e5"
+    },
+    "paws.security.identity": {
+      "Package": "paws.security.identity",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d4d9f0ac7e665888c12d799421fcf345"
+    },
+    "paws.storage": {
+      "Package": "paws.storage",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d0a0428696cdc8099e8c93d2257b21f2"
+    },
     "pillar": {
       "Package": "pillar",
       "Version": "1.6.1",
@@ -433,6 +524,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ad03909b44677f930fa156d47d7a3aeb"
+    },
+    "xml2": {
+      "Package": "xml2",
+      "Version": "1.3.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d4d71a75dd3ea9eb5fa28cc21f9585e2"
     },
     "xtable": {
       "Package": "xtable",
