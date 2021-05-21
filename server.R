@@ -26,11 +26,11 @@ auth0_server(function(input, output, session) {
   output$menu <- renderUI({
     req(session$userData$auth0_info)
     tagList(
-      fluidRow(column(12,
+      fluidRow(column(3,
         dateRangeInput("dates", "Selecciona el període a visualitzar:",
                        start = today() - days(1), end = today(),
                        min = dmy(01012020), max = today(),
-                       width = "20%", language = "ca", weekstart = 1)
+                       language = "ca", weekstart = 1)
       ))
       # hr()
     )
@@ -38,12 +38,12 @@ auth0_server(function(input, output, session) {
   
   power_data <- reactive({
     req(input$dates)
-    power_tbl <- query_timeseries_data_table(
-      power_dynamodb_table, 'id', user_metadata()$id_power, 'timestamp', input$dates[1], input$dates[2], time_interval_mins = 5, spread_column = 'data'
+    current_tbl <- query_dynamodb_table_timeseries(
+      sensors_dynamodb, config$dynamodb$power_table_name, 'id', user_metadata()$id_power, 'timestamp', input$dates[1], input$dates[2]+days(1), parse_item
     )
-    if (!is.null(power_tbl)) {
+    if (!is.null(current_tbl)) {
       return( 
-        power_tbl %>% 
+        current_tbl %>% 
           mutate(power = power_from_current(current, user_metadata()$phases)) %>% 
           select(datetime, power)
       )
@@ -54,8 +54,8 @@ auth0_server(function(input, output, session) {
   
   dht_data <- reactive({
     req(input$dates)
-    dht_tbl <- query_timeseries_data_table(
-      dht_dynamodb_table, 'id', user_metadata()$id_dht, 'timestamp', input$dates[1], input$dates[2], time_interval_mins = 15, spread_column = 'data'
+    dht_tbl <- query_dynamodb_table_timeseries(
+      sensors_dynamodb, config$dynamodb$dht_table_name, 'id', user_metadata()$id_dht, 'timestamp', input$dates[1], input$dates[2]+days(1), parse_item
     )
     if (!is.null(dht_tbl)) {
       return( 
@@ -117,12 +117,13 @@ auth0_server(function(input, output, session) {
       fill(-datetime, .direction = "down") %>%
       arrange(datetime) %>% 
       distinct()
+
     user_data %>% 
       dyplot() %>% 
-      dySeries("power", label = "Power", axis=('y'), color = "green", fillGraph = T) %>% 
-      dyAxis("y", label = "Power (W)", valueRange = c(0, max(user_data[['power']], na.rm = T)*1.2)) %>% 
-      dySeries("temperature", label = "Temperature", axis=('y2'), color = "navy", strokeWidth = 2) %>% 
-      dyAxis("y2", label = "Temperature (C)", valueRange = c(0, max(user_data[['temperature']], na.rm = T)*1.2)) %>% 
+      dySeries("power", label = "Consum elèctric", axis=('y'), color = "green", fillGraph = T) %>% 
+      dyAxis("y", label = "Potència (W)", valueRange = c(0, max(user_data[['power']], na.rm = T)*1.2)) %>% 
+      dySeries("temperature", label = "Temperatura interior", axis=('y2'), color = "navy", strokeWidth = 2) %>% 
+      dyAxis("y2", label = "Temperatura (ºC)", valueRange = c(0, max(user_data[['temperature']], na.rm = T)*1.2)) %>% 
       dyRangeSelector()
   })
   
