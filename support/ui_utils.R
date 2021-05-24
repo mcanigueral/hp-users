@@ -1,3 +1,17 @@
+
+# Waiter screen -----------------------------------------------------------
+
+waiting_screen <- function(msg) {
+  tagList(
+    spin_flower(),
+    h4(msg)
+  )
+} 
+
+
+
+# Info box ----------------------------------------------------------------
+
 infoBox <- function(title, value, units, subtitle, fa_icon, color, width=3) {
   shiny::column(
     width,

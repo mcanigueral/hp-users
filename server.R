@@ -1,5 +1,5 @@
 auth0_server(function(input, output, session) {
-  
+
   user_metadata <- reactive({
     users_metadata %>% 
       filter(mail == session$userData$auth0_info$name) %>% 
@@ -16,7 +16,7 @@ auth0_server(function(input, output, session) {
         column(
           1,
           style = 'margin-top: 25px;',
-          logoutButton("Tanca sessio", icon = icon('user'))
+          logoutButton("", icon = icon('user'))
         )
       ),
       hr()
@@ -38,9 +38,11 @@ auth0_server(function(input, output, session) {
   
   power_data <- reactive({
     req(input$dates)
+    waiter_show(html = waiting_screen("Consultant el consum elèctric..."), color = "#00000080")
     current_tbl <- query_dynamodb_table_timeseries(
       sensors_dynamodb, config$dynamodb$power_table_name, 'id', user_metadata()$id_power, 'timestamp', input$dates[1], input$dates[2]+days(1), parse_item
     )
+    waiter_hide()
     if (!is.null(current_tbl)) {
       return( 
         current_tbl %>% 
@@ -54,16 +56,18 @@ auth0_server(function(input, output, session) {
   
   dht_data <- reactive({
     req(input$dates)
+    waiter_show(html = waiting_screen("Consultant la temperatura..."), color = "#00000080")
     dht_tbl <- query_dynamodb_table_timeseries(
       sensors_dynamodb, config$dynamodb$dht_table_name, 'id', user_metadata()$id_dht, 'timestamp', input$dates[1], input$dates[2]+days(1), parse_item
     )
+    waiter_hide()
     if (!is.null(dht_tbl)) {
       return( 
         dht_tbl %>% 
-          select(datetime, temperature, humidity)
+          select(datetime, temperature)
       )
     } else {
-      return(tibble(datetime = input$dates[1], temperature = NA, humidity = NA))
+      return(tibble(datetime = input$dates[1], temperature = NA))
     }
   })
   
@@ -112,34 +116,48 @@ auth0_server(function(input, output, session) {
     )
   })
   
-  output$dyplot <- renderDygraph({
-    user_data <- left_join(power_data(), dht_data(), by = 'datetime') %>% 
+  user_data <- reactive({
+    left_join(power_data(), dht_data(), by = 'datetime') %>% 
       fill(-datetime, .direction = "down") %>%
       arrange(datetime) %>% 
       distinct()
-
-    user_data %>% 
+  }) 
+  
+  output$dyplot <- renderDygraph({
+    user_data() %>% 
       dyplot() %>% 
       dySeries("power", label = "Consum elèctric", axis=('y'), color = "green", fillGraph = T) %>% 
-      dyAxis("y", label = "Potència (W)", valueRange = c(0, max(user_data[['power']], na.rm = T)*1.2)) %>% 
+      dyAxis("y", label = "Potència (W)", valueRange = c(0, max(user_data()[['power']], na.rm = T)*1.2)) %>% 
       dySeries("temperature", label = "Temperatura interior", axis=('y2'), color = "navy", strokeWidth = 2) %>% 
-      dyAxis("y2", label = "Temperatura (ºC)", valueRange = c(0, max(user_data[['temperature']], na.rm = T)*1.2)) %>% 
+      dyAxis("y2", label = "Temperatura (ºC)", valueRange = c(0, max(user_data()[['temperature']], na.rm = T)*1.2)) %>% 
       dyRangeSelector()
   })
   
   
-  output$body <- renderUI({
+  output$graph <- renderUI({
     tagList(
       wellPanel(
         style = 'background: #fff; border-top: 3px solid #d2d6de;', 
         fluidRow(dygraphOutput('dyplot'))
-      ),
-      fluidRow(
-        align = 'center',
-        indicators()
       )
     )
   })
+  
+  output$indicators <- renderUI({
+    fluidRow(
+      align = 'center',
+      indicators()
+    )
+  })
+  
+  output$download <- downloadHandler(
+    filename = function() {
+      paste0("aerotermia-", today(), ".xlsx")
+    },
+    content = function(file) {
+      writexl::write_xlsx(user_data(), file)
+    }
+  )
   
   
 }, info = a0_info)

@@ -1,5 +1,6 @@
 library(auth0)
 library(shiny)
+library(shinydashboard)
 library(dygraphs)
 library(dutils)
 library(dplyr)
@@ -7,6 +8,7 @@ library(lubridate)
 library(purrr)
 library(tidyr)
 library(paws)
+library(waiter)
 options(scipen=999) # To avoid scientific notation
 
 # shiny::runApp(port = 8080, launch.browser = TRUE)
@@ -21,7 +23,6 @@ config <- config::get(file = 'config.yml')
 # Utils before running the app --------------------------------------------
 source("support/server_utils.R")
 source("support/ui_utils.R")
-
 
 # Metadata ---------------------------------------------------------------
 users_metadata <- readxl::read_xlsx('metadata.xlsx')
