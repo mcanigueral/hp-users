@@ -1,14 +1,26 @@
 auth0_ui(dashboardPage(
   title = "Aerotèrmia", skin = "green",
-  dashboardHeader(title = "Monitorització d'aerotèrmia",
-                  titleWidth = 300,
+  dashboardHeader(title = tagList(tags$img(src = "http://mastermms.udg.edu/assets/2015/09/UdG_sigles_blau.png", style = "height: 40px;"),
+                                  HTML("&nbsp;"),
+                                  "Monitorització d'aerotèrmia"),
+                  titleWidth = 350,
                   tags$li(
-                    logoutButton("", icon = icon('sign-out'), style = "border-radius: 10px;"),
-                    class = "dropdown", 
+                    logoutButton(
+                      "Tanca sessió", icon = icon('sign-out'),
+                      style = "border-radius: 10px; background-color: #008D4C; border-color: #008D4C; color: white;"
+                    ),
+                    class = "dropdown",
                     style = "margin-top:5px; margin-right:10px;"
                   )
   ),
-  dashboardSidebar(disable = T),
+  dashboardSidebar(
+    disable = T
+    # width = 350, collapsed = T,
+    # logoutButton(
+    #   "Tanca sessió", icon = icon('sign-out'),
+    #   style = "border-radius: 10px; background-color: #008D4C; border-color: #008D4C; color: white;"
+    # )
+  ),
   dashboardBody(
     use_waiter(),
     tags$head(
@@ -21,6 +33,7 @@ auth0_ui(dashboardPage(
     uiOutput("indicators"),
     hr(),
     # Download data
-    downloadButton("download", "Descarrega't les dades (Excel)")
+    downloadButton("download", "Descarrega't les dades (Excel)",
+                   style = "border-radius: 10px; background-color: #008D4C; border-color: #008D4C; color: white;")
   )
 ), info = a0_info)

@@ -6,23 +6,6 @@ auth0_server(function(input, output, session) {
       as.list()
   })
   
-  output$header <- renderUI({
-    tagList(
-      fluidRow(
-        column(
-          11,
-          h1(strong(paste("Benvingut,", user_metadata()$name)))
-        ),
-        column(
-          1,
-          style = 'margin-top: 25px;',
-          logoutButton("", icon = icon('user'))
-        )
-      ),
-      hr()
-    )
-  })
-  
   output$menu <- renderUI({
     req(session$userData$auth0_info)
     tagList(
