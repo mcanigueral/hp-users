@@ -1,6 +1,6 @@
 auth0_ui(dashboardPage(
   title = "Aerotèrmia", skin = "green",
-  dashboardHeader(title = tagList(tags$img(src = "http://mastermms.udg.edu/assets/2015/09/UdG_sigles_blau.png", style = "height: 40px;"),
+  dashboardHeader(title = tagList(tags$img(src = "udg_logo_short.png", height = "40px;"),
                                   HTML("&nbsp;"),
                                   "Monitorització d'aerotèrmia"),
                   titleWidth = 350,
