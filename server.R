@@ -22,14 +22,18 @@ auth0_server(function(input, output, session) {
   power_data <- reactive({
     req(input$dates)
     waiter_show(html = waiting_screen("Consultant el consum elèctric..."), color = "#00000080")
-    current_tbl <- query_dynamodb_table_timeseries(
-      sensors_dynamodb, config$dynamodb$power_table_name, 'id', user_metadata()$id_power, 'timestamp', input$dates[1], input$dates[2]+days(1), parse_item
+    current_tbl <- query_timeseries_data_table_py(
+      power_table, 'id', user_metadata()$id_power, 'timestamp', input$dates[1], input$dates[2]+days(1)
     )
     waiter_hide()
     if (!is.null(current_tbl)) {
       return( 
         current_tbl %>% 
-          mutate(power = power_from_current(current, user_metadata()$phases)) %>% 
+          mutate(
+            datetime = floor_date(as_datetime(timestamp/1000, tz = config$tzone), '5 minutes'),
+            map_dfr(data, ~ .x),
+            power = power_from_current(current, user_metadata()$phases)
+          ) %>% 
           select(datetime, power)
       )
     } else {
@@ -40,13 +44,17 @@ auth0_server(function(input, output, session) {
   dht_data <- reactive({
     req(input$dates)
     waiter_show(html = waiting_screen("Consultant la temperatura..."), color = "#00000080")
-    dht_tbl <- query_dynamodb_table_timeseries(
-      sensors_dynamodb, config$dynamodb$dht_table_name, 'id', user_metadata()$id_dht, 'timestamp', input$dates[1], input$dates[2]+days(1), parse_item
+    dht_tbl <- query_timeseries_data_table_py(
+      dht_table, 'id', user_metadata()$id_dht, 'timestamp', input$dates[1], input$dates[2]+days(1)
     )
     waiter_hide()
     if (!is.null(dht_tbl)) {
       return( 
         dht_tbl %>% 
+          mutate(
+            datetime = floor_date(as_datetime(timestamp/1000, tz = config$tzone), '5 minutes'),
+            map_dfr(data, ~ .x)
+          ) %>% 
           select(datetime, temperature)
       )
     } else {
