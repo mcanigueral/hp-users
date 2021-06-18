@@ -7,7 +7,6 @@ library(dplyr)
 library(lubridate)
 library(purrr)
 library(tidyr)
-library(paws)
 library(waiter)
 options(scipen=999) # To avoid scientific notation
 
