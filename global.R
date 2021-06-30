@@ -29,6 +29,7 @@ source("support/server_utils.R")
 source("support/ui_utils.R")
 
 # Metadata ---------------------------------------------------------------
+download.file(url=config$metadata_url, destfile="metadata.xlsx")
 users_metadata <- readxl::read_xlsx('metadata.xlsx')
 
 
